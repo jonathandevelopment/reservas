@@ -4,6 +4,9 @@ import { ThemeSupa } from '@supabase/auth-ui-shared'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { Database } from './database.types'
 
+
+const redirectUrl = process.env.NEXT_VERCEL_REDIRECT_URL;
+
 export default function AuthForm() {
   const supabase = createClientComponentClient<Database>()
 
@@ -15,7 +18,7 @@ export default function AuthForm() {
       theme="dark"
       showLinks={false}
       providers={[]}
-      redirectTo="http://localhost:3000/auth/callback"
+      redirectTo={`${redirectUrl}/auth/callback`}
     />
   )
 }
