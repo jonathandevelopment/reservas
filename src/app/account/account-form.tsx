@@ -20,7 +20,7 @@ export default function AccountForm({ session }: { session: Session | null }) {
       let { data, error, status } = await supabase
         .from('profiles')
         .select(`full_name, username, website, avatar_url`)
-        .eq('id', user?.id)
+        .eq('id', user?.id || '')
         .single()
 
       if (error && status !== 406) {
@@ -46,33 +46,37 @@ export default function AccountForm({ session }: { session: Session | null }) {
 
   async function updateProfile({
     username,
+    fullname,
     website,
     avatar_url,
   }: {
-    username: string | null
-    fullname: string | null
-    website: string | null
-    avatar_url: string | null
+    username: string | null;
+    fullname: string | null;
+    website: string | null;
+    avatar_url: string | null;
   }) {
     try {
-      setLoading(true)
-
+      setLoading(true);
+  
       let { error } = await supabase.from('profiles').upsert({
-        id: user?.id as string,
+        id: user?.id || '',
         full_name: fullname,
         username,
         website,
         avatar_url,
         updated_at: new Date().toISOString(),
-      })
-      if (error) throw error
-      alert('Profile updated!')
+      });
+  
+      if (error) throw error;
+      alert('Profile updated!');
     } catch (error) {
-      alert('Error updating the data!')
+      alert('Error updating the data!');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
+  
+  
 
   return (
     <div className="form-widget">
