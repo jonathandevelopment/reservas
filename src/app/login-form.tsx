@@ -5,20 +5,20 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { Database } from './database.types'
 
 
-const redirectUrl = process.env.NEXT_VERCEL_REDIRECT_URL;
+//const redirectUrl = process.env.NEXT_VERCEL_REDIRECT_URL;
 
-export default function AuthForm() {
+export default function LoginForm() {
   const supabase = createClientComponentClient<Database>()
 
   return (
     <Auth
       supabaseClient={supabase}
-      view="sign_up"
+      view="sign_in"
       appearance={{ theme: ThemeSupa }}
       theme="light"
       showLinks={false}
       providers={[]}
-      redirectTo={`${redirectUrl}/auth/callback`}
+      redirectTo={`/account`}
     />
   )
 } 
