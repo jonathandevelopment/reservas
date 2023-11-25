@@ -10,6 +10,7 @@ export default function AccountForm({ session }: { session: Session | null }) {
   const [name, setName] = useState<string | null>(null)
   const [lastname, setLastName] = useState<string | null>(null)
   const [username, SetUsername] = useState<string | null>(null)
+  const [phone, SetPhone] = useState<string | null>(null)
   const [avatar_url, setAvatarUrl] = useState<string | null>(null)
   const user = session?.user
 
@@ -19,7 +20,7 @@ export default function AccountForm({ session }: { session: Session | null }) {
 
       let { data, error, status } = await supabase
         .from('profiles')
-        .select(`name, lastname, username, avatar_url`)
+        .select(`name, lastname, username, avatar_url, phone`)
         .eq('id', user?.id || '')
         .single()
 
@@ -32,9 +33,10 @@ export default function AccountForm({ session }: { session: Session | null }) {
         setLastName(data.lastname)
         SetUsername(data.username)
         setAvatarUrl(data.avatar_url)
+        SetPhone(data.phone)
       }
     } catch (error) {
-      alert('Error loading user data!')
+      alert('Error al cargar información del usuario!')
     } finally {
       setLoading(false)
     }
@@ -49,11 +51,13 @@ export default function AccountForm({ session }: { session: Session | null }) {
     name,
     username,
     avatar_url,
+    phone,
   }: {
     lastname: string | null;
     name: string | null;
     username: string | null;
     avatar_url: string | null;
+    phone: string | null;
   }) {
     try {
       setLoading(true);
@@ -64,6 +68,7 @@ export default function AccountForm({ session }: { session: Session | null }) {
         lastname,
         username,
         avatar_url,
+        phone,
         updated_at: new Date().toISOString(),
       });
   
@@ -86,7 +91,7 @@ export default function AccountForm({ session }: { session: Session | null }) {
         size={150}
         onUpload={(url) => {
           setAvatarUrl(url)
-          updateProfile({ name, lastname, username, avatar_url: url })
+          updateProfile({ name, lastname, username, avatar_url, phone: url })
         }}
       />
       <div>
@@ -115,16 +120,26 @@ export default function AccountForm({ session }: { session: Session | null }) {
         <label htmlFor="username">Nombre de usuario</label>
         <input
           id="username"
-          type="url"
+          type="text"
           value={username || ''}
           onChange={(e) => SetUsername(e.target.value)}
         />
       </div>
+      <div>
+        <label htmlFor="phone">Teléfono</label>
+        <input
+          id="phone"
+          type="text"
+          value={phone || ''}
+          onChange={(e) => SetPhone(e.target.value)}
+        />
+      </div>
+        
 
       <div>
         <button
           className="button primary block"
-          onClick={() => updateProfile({ name, lastname, username, avatar_url })}
+          onClick={() => updateProfile({ name, lastname, username, avatar_url, phone })}
           disabled={loading}
         >
           {loading ? 'Loading ...' : 'Update'}
