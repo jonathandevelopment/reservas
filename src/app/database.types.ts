@@ -13,26 +13,26 @@ export interface Database {
         Row: {
           id: string
           updated_at: string | null
-          username: string | null
-          full_name: string | null
+          lastname: string | null
+          name: string | null
           avatar_url: string | null
-          website: string | null
+          username: string | null
         }
         Insert: {
           id: string
           updated_at?: string | null
-          username?: string | null
-          full_name?: string | null
+          lastname?: string | null
+          name?: string | null
           avatar_url?: string | null
-          website?: string | null
+          username?: string | null
         }
         Update: {
           id?: string
           updated_at?: string | null
-          username?: string | null
-          full_name?: string | null
+          lastname?: string | null
+          name?: string | null
           avatar_url?: string | null
-          website?: string | null
+          username?: string | null
         }
       }
     }

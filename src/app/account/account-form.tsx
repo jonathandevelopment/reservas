@@ -7,9 +7,9 @@ import { Session, createClientComponentClient } from '@supabase/auth-helpers-nex
 export default function AccountForm({ session }: { session: Session | null }) {
   const supabase = createClientComponentClient<Database>()
   const [loading, setLoading] = useState(true)
-  const [fullname, setFullname] = useState<string | null>(null)
-  const [username, setUsername] = useState<string | null>(null)
-  const [website, setWebsite] = useState<string | null>(null)
+  const [name, setName] = useState<string | null>(null)
+  const [lastname, setLastName] = useState<string | null>(null)
+  const [username, SetUsername] = useState<string | null>(null)
   const [avatar_url, setAvatarUrl] = useState<string | null>(null)
   const user = session?.user
 
@@ -19,7 +19,7 @@ export default function AccountForm({ session }: { session: Session | null }) {
 
       let { data, error, status } = await supabase
         .from('profiles')
-        .select(`full_name, username, website, avatar_url`)
+        .select(`name, lastname, username, avatar_url`)
         .eq('id', user?.id || '')
         .single()
 
@@ -28,9 +28,9 @@ export default function AccountForm({ session }: { session: Session | null }) {
       }
 
       if (data) {
-        setFullname(data.full_name)
-        setUsername(data.username)
-        setWebsite(data.website)
+        setName(data.name)
+        setLastName(data.lastname)
+        SetUsername(data.username)
         setAvatarUrl(data.avatar_url)
       }
     } catch (error) {
@@ -45,14 +45,14 @@ export default function AccountForm({ session }: { session: Session | null }) {
   }, [user, getProfile])
 
   async function updateProfile({
+    lastname,
+    name,
     username,
-    fullname,
-    website,
     avatar_url,
   }: {
+    lastname: string | null;
+    name: string | null;
     username: string | null;
-    fullname: string | null;
-    website: string | null;
     avatar_url: string | null;
   }) {
     try {
@@ -60,9 +60,9 @@ export default function AccountForm({ session }: { session: Session | null }) {
   
       let { error } = await supabase.from('profiles').upsert({
         id: user?.id || '',
-        full_name: fullname,
+        name: name,
+        lastname,
         username,
-        website,
         avatar_url,
         updated_at: new Date().toISOString(),
       });
@@ -86,7 +86,7 @@ export default function AccountForm({ session }: { session: Session | null }) {
         size={150}
         onUpload={(url) => {
           setAvatarUrl(url)
-          updateProfile({ fullname, username, website, avatar_url: url })
+          updateProfile({ name, lastname, username, avatar_url: url })
         }}
       />
       <div>
@@ -94,37 +94,37 @@ export default function AccountForm({ session }: { session: Session | null }) {
         <input id="email" type="text" value={session?.user.email} disabled />
       </div>
       <div>
-        <label htmlFor="fullName">Full Name</label>
+        <label htmlFor="name">Nombre</label>
         <input
-          id="fullName"
+          id="name"
           type="text"
-          value={fullname || ''}
-          onChange={(e) => setFullname(e.target.value)}
+          value={name || ''}
+          onChange={(e) => setName(e.target.value)}
         />
       </div>
       <div>
-        <label htmlFor="username">Username</label>
+        <label htmlFor="lastname">Apellido</label>
+        <input
+          id="lastname"
+          type="text"
+          value={lastname || ''}
+          onChange={(e) => setLastName(e.target.value)}
+        />
+      </div>
+      <div>
+        <label htmlFor="username">Nombre de usuario</label>
         <input
           id="username"
-          type="text"
-          value={username || ''}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="website">Website</label>
-        <input
-          id="website"
           type="url"
-          value={website || ''}
-          onChange={(e) => setWebsite(e.target.value)}
+          value={username || ''}
+          onChange={(e) => SetUsername(e.target.value)}
         />
       </div>
 
       <div>
         <button
           className="button primary block"
-          onClick={() => updateProfile({ fullname, username, website, avatar_url })}
+          onClick={() => updateProfile({ name, lastname, username, avatar_url })}
           disabled={loading}
         >
           {loading ? 'Loading ...' : 'Update'}
