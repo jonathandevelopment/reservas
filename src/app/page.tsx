@@ -6,7 +6,6 @@ import Navbar from "./components/Navbar";
 export default function Home() {
   return (
     <div >
-      <Navbar />
       <div className="container">
       <div className="py-10 grid grid-cols-1 gap-10 place-items-center">
           <h1 className="text-3xl capitalize">
