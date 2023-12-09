@@ -12,15 +12,16 @@ export async function POST(request: Request) {
   const cookieStore = cookies()
   const supabase = createRouteHandlerClient<Database>({ cookies: () => cookieStore })
 
-  await supabase.auth.signUp({
+  const { data, error }= await supabase.auth.signInWithPassword({
     email,
     password,
-    options: {
-      emailRedirectTo: `${requestUrl.origin}/auth/callback`,
-    },
   })
-
-  return NextResponse.redirect(requestUrl.origin, {
+if(error){
+  return NextResponse.redirect(new URL('/login?error=Correo o contraseña incorrecta',requestUrl), {
+    status: 301,
+  })
+}
+  return NextResponse.redirect(new URL('/account',requestUrl), {
     status: 301,
   })
 }
