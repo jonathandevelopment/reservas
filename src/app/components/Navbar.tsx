@@ -1,16 +1,17 @@
+import Link from "next/link";
 // components/Navbar.js
 const Navbar = () => {
     return (
       <nav className="bg-gray-800 p-4">
         <div className="container mx-auto flex justify-between items-center">
-          <a href="/" className="text-white text-xl font-bold">
+          <Link href="/" className="text-white text-xl font-bold">
             Home
-          </a>
+          </Link>
   
           <div className="flex items-center">
-            <a href="/account" className="text-white">
+            <Link href="/account" className="text-white">
               Account
-            </a>
+            </Link>
             <img
               src="/userplaceholder.svg" // Replace with the actual path to the user's avatar image
               alt="User Avatar"
